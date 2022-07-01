@@ -31,7 +31,12 @@ module.exports.getUserById = (req, res) => {
       }
       res.status(200).send({ user });
     })
-    .catch(() => res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+      }
+      res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
+    });
 };
 
 module.exports.updateProfile = (req, res) => {
