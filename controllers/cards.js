@@ -1,8 +1,6 @@
 const Card = require('../models/card');
 
-const BAD_REQUEST = 400;
-const NOT_FOUND = 404;
-const SERVER_ERROR = 500;
+const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require('../errors/constants');
 
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
@@ -11,6 +9,7 @@ module.exports.createCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+        return;
       }
       res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
     });
@@ -29,11 +28,12 @@ module.exports.deleteCard = (req, res) => {
         res.status(NOT_FOUND).send({ message: 'Карточка с указанным id не найдена' });
         return;
       }
-      res.status(200).send({ message: 'Карточка успешно удалена' });
+      res.send({ message: 'Карточка успешно удалена' });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+        return;
       }
       res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
     });
@@ -50,11 +50,12 @@ module.exports.likeCard = (req, res) => {
         res.status(NOT_FOUND).send({ message: 'Карточка с указанным id не найдена' });
         return;
       }
-      res.status(200).send({ data: card });
+      res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+        return;
       }
       res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
     });
@@ -71,11 +72,12 @@ module.exports.dislikeCard = (req, res) => {
         res.status(NOT_FOUND).send({ message: 'Карточка с указанным id не найдена' });
         return;
       }
-      res.status(200).send({ data: card });
+      res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+        return;
       }
       res.status(SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
     });
