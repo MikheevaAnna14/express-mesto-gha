@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+const regExLink = require('../errors/regExLink');
 
 const signupValidation = celebrate({
   body: Joi.object().keys({
@@ -18,7 +19,7 @@ const signupValidation = celebrate({
       'string.min': 'Поле должно содержать не менее 2 символов',
       'string.max': 'Поле должно содержать не более 30 символов',
     }),
-    avatar: Joi.string().regex(/^https?:\/\/(www\.)?[\w-]+[\.\w][\w\/-~:\?#\[\]@!\$&'()\*\+,;\=]*#?/),
+    avatar: Joi.string().regex(regExLink),
   }),
 });
 

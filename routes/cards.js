@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 
 const cardIdValidation = require('../middlewares/cardIdValidation');
+const regExLink = require('../errors/regExLink');
 
 const {
   createCard,
@@ -26,7 +27,7 @@ router.post('/', celebrate({
       .required()
       .min(2)
       .max(30)
-      .regex(/^https?:\/\/(www\.)?[\w-]+[\.\w][\w\/-~:\?#\[\]@!\$&'()\*\+,;\=]*#?/)
+      .regex(regExLink)
       .messages({
         'string.min': 'Поле должно содержать не менее 2 символов',
         'string.max': 'Поле должно содержать не более 30 символов',
