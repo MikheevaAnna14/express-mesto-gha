@@ -6,8 +6,7 @@ const signinValidation = celebrate({
       'any.required': 'Это поле должно быть заполнено',
       'string.email': 'Неверный формат электронной почты',
     }),
-    password: Joi.string().required().min(8).messages({
-      'string.min': 'Пароль должен содержать не менее 8 символов',
+    password: Joi.string().required().messages({
       'any.required': 'Это поле должно быть заполнено',
     }),
   }),

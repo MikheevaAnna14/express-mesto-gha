@@ -1,5 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
-const regExLink = require('../errors/regExLink');
+const validator = require('validator');
+const BadRequest = require('../errors/BadRequest');
 
 const signupValidation = celebrate({
   body: Joi.object().keys({
@@ -7,8 +8,7 @@ const signupValidation = celebrate({
       'any.required': 'Это поле должно быть заполнено',
       'string.email': 'Неверный формат электронной почты',
     }),
-    password: Joi.string().required().min(8).messages({
-      'string.min': 'Пароль должен содержать не менее 8 символов',
+    password: Joi.string().required().messages({
       'any.required': 'Это поле должно быть заполнено',
     }),
     name: Joi.string().min(2).max(30).messages({
@@ -19,7 +19,12 @@ const signupValidation = celebrate({
       'string.min': 'Поле должно содержать не менее 2 символов',
       'string.max': 'Поле должно содержать не более 30 символов',
     }),
-    avatar: Joi.string().regex(regExLink),
+    avatar: Joi.string().custom((value) => {
+      if (!validator.isURL(value, { require_protocol: true })) {
+        throw new BadRequest('Неправильный формат ссылки на изображение');
+      }
+      return value;
+    }),
   }),
 });
 

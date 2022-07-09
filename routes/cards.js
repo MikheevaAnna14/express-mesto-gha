@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-
+const validator = require('validator');
 const cardIdValidation = require('../middlewares/cardIdValidation');
-const regExLink = require('../errors/regExLink');
+
+const BadRequest = require('../errors/BadRequest');
 
 const {
   createCard,
@@ -25,12 +26,13 @@ router.post('/', celebrate({
       }),
     link: Joi.string()
       .required()
-      .min(2)
-      .max(30)
-      .regex(regExLink)
+      .custom((value) => {
+        if (!validator.isURL(value, { require_protocol: true })) {
+          throw new BadRequest('Неверный формат ссылки');
+        }
+        return value;
+      })
       .messages({
-        'string.min': 'Поле должно содержать не менее 2 символов',
-        'string.max': 'Поле должно содержать не более 30 символов',
         'any.required': 'Это поле должно быть заполнено',
       }),
   }),

@@ -48,9 +48,11 @@ module.exports.createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные'));
+        return;
       }
       if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже зарегистрирован'));
+        return;
       }
       next(err);
     });
@@ -68,6 +70,7 @@ module.exports.getCurrentUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequest('Переданы некорректные данные'));
+        return;
       }
       next(err);
     });
@@ -90,6 +93,7 @@ module.exports.getUserById = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequest('Переданы некорректные данные'));
+        return;
       }
       next(err);
     });
@@ -114,6 +118,7 @@ module.exports.updateProfile = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные'));
+        return;
       }
       next(err);
     });
@@ -138,6 +143,7 @@ module.exports.updateAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные'));
+        return;
       }
       next(err);
     });
